@@ -1,49 +1,36 @@
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
-import icon from '../../assets/icon.svg';
+import { Button, Center, Stack } from '@chakra-ui/react'
+import { ChakraProvider } from '@chakra-ui/react'
 
 const Hello = () => {
   return (
-    <div>
-      <div className="Hello">
-        <img width="200px" alt="icon" src={icon} />
-      </div>
-      <h1>electron-react-boilerplate</h1>
-      <div className="Hello">
-        <a
-          href="https://electron-react-boilerplate.js.org/"
-          target="_blank"
-          rel="noreferrer"
-        >
-          <button type="button">
-            <span role="img" aria-label="books">
-              📚
-            </span>
-            Read our docs
-          </button>
-        </a>
-        <a
-          href="https://github.com/sponsors/electron-react-boilerplate"
-          target="_blank"
-          rel="noreferrer"
-        >
-          <button type="button">
-            <span role="img" aria-label="books">
-              🙏
-            </span>
-            Donate
-          </button>
-        </a>
-      </div>
-    </div>
+    <Center>
+    <Stack direction='row' spacing={4} align='center'>
+      <Button colorScheme='teal' variant='solid'>
+        Button
+      </Button>
+      <Button colorScheme='teal' variant='outline'>
+        Button
+      </Button>
+      <Button colorScheme='teal' variant='ghost'>
+        Button
+      </Button>
+      <Button colorScheme='teal' variant='link'>
+        Button
+      </Button>
+    </Stack>
+    </Center>
   );
 };
 
 export default function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Hello />} />
-      </Routes>
-    </Router>
+    <ChakraProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Hello />} />
+        </Routes>
+      </Router>
+    </ChakraProvider>
   );
 }

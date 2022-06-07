@@ -1,25 +1,35 @@
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
-import { Button, Center, Stack } from '@chakra-ui/react'
+import { Link, VStack, Text, Flex, Box } from '@chakra-ui/react'
 import { ChakraProvider } from '@chakra-ui/react'
+
+import SimpleSidebar from './components/sidebar'
+
+const MainContent = () => {
+  return (
+    <Flex>
+    <VStack spacing={4} align='center'>
+      <Link>
+        <Text>
+          Icon
+        </Text>
+      </Link>
+      <Link>
+        <Text>
+          SQL Commander
+        </Text>
+      </Link>
+    </VStack><Box flex='1'>
+        Text here
+      </Box>
+    </Flex>
+  );
+};
 
 const Hello = () => {
   return (
-    <Center>
-    <Stack direction='row' spacing={4} align='center'>
-      <Button colorScheme='teal' variant='solid'>
-        Button
-      </Button>
-      <Button colorScheme='teal' variant='outline'>
-        Button
-      </Button>
-      <Button colorScheme='teal' variant='ghost'>
-        Button
-      </Button>
-      <Button colorScheme='teal' variant='link'>
-        Button
-      </Button>
-    </Stack>
-    </Center>
+    <Flex>
+      <SimpleSidebar children={<MainContent />} />
+    </Flex>
   );
 };
 

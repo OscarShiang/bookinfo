@@ -9,7 +9,7 @@ import SimpleSidebar from './components/sidebar'
 const MainContent = () => {
   return (
     <Routes>
-      <Route path="/" element={<Navigate to="/bookviewer" />} />
+      <Route path='index.html' element={<Navigate replace to='/bookviewer' />} />
       <Route path="/bookviewer" element={<BookViewer />} />
       <Route path="/sqlcmd" element={<SQLCmd />} />
     </Routes>

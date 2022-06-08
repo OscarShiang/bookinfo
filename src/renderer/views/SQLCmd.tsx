@@ -1,67 +1,89 @@
-import { IconButton, Stack, Table, TableContainer, Tbody, Td, Textarea, Th, Thead, Tr, useToast } from "@chakra-ui/react";
-import { useState } from "react";
+import {
+  IconButton,
+  Stack,
+  Table,
+  TableContainer,
+  Tbody,
+  Td,
+  Textarea,
+  Th,
+  Thead,
+  Tr,
+  useToast,
+} from '@chakra-ui/react';
+import { useState } from 'react';
 import { FaCheck } from 'react-icons/fa';
-import query from "../sql";
+import query from '../sql';
 
 export default function SQLCmd() {
-    const [table, setTable] = useState([]);
-    const [input, setInput] = useState('');
-    const toast = useToast();
+  const [table, setTable] = useState([]);
+  const [input, setInput] = useState('');
+  const toast = useToast();
 
-    const handleInputChange = (e) => {
-        setInput(e.target.value);
-    }
+  const handleInputChange = (e) => {
+    setInput(e.target.value);
+  };
 
-    function submit() {
-        console.log(input);
+  function submit() {
+    console.log(input);
 
-        query(input).then((res) => {
-            console.log(res);
-            if (res.status === 'fail') {
-                toast({
-                    description: 'Something went wrong',
-                    status: 'error',
-                    isClosable: true,
-                })
-            } else {
-                setTable(res.data);
-                toast({ 
-                    description: 'Success',
-                    isClosable: true,
-                });
-            }
-        })
-    };
+    query(input).then((res) => {
+      console.log(res);
+      if (res.status === 'fail') {
+        toast({
+          description: 'Something went wrong',
+          status: 'error',
+          isClosable: true,
+        });
+      } else {
+        setTable(res.data);
+        toast({
+          description: 'Success',
+          isClosable: true,
+        });
+      }
+    });
+  }
 
-    return <Stack direction='column'>
-        <Stack direction='row'>
-            <Textarea backgroundColor='white' placeholder='Enter a SQL Command'  onChange={ handleInputChange } />
-            <IconButton colorScheme='cyan' icon={<FaCheck color="white" />} size='md' aria-label='Execute' onClick={ submit } />
-        </Stack>
-        <TableContainer bgColor='white' borderRadius='md'>
+  return (
+    <Stack direction="column">
+      <Stack direction="row">
+        <Textarea
+          backgroundColor="white"
+          placeholder="Enter a SQL Command"
+          onChange={handleInputChange}
+        />
+        <IconButton
+          colorScheme="cyan"
+          icon={<FaCheck color="white" />}
+          size="md"
+          aria-label="Execute"
+          onClick={submit}
+        />
+      </Stack>
+      <TableContainer bgColor="white" borderRadius="md">
         <Table>
-            <Thead>
+          <Thead>
             <Tr>
-                {table.length > 0 ? Object.keys(table[0]).map((k) => (
-                    <Th>{k}</Th>
-                )) : Object.keys(table).map((k) => (
-                    <Th>{k}</Th>
-                ))}
+              {table.length > 0
+                ? Object.keys(table[0]).map((k) => <Th>{k}</Th>)
+                : Object.keys(table).map((k) => <Th>{k}</Th>)}
             </Tr>
-            </Thead>
-            <Tbody>
-                {table.map((row) => {
-                    let cells = []
-                    const val = Object.values(row);
-                    console.log(row)
-                    for (let i = 0; i < val.length; i++) {
-                        console.log('push')
-                        cells.push(<Td>{val[i]}</Td>);
-                    }
-                    return <Tr> {cells} </Tr>
-                })}
-            </Tbody>
+          </Thead>
+          <Tbody>
+            {table.map((row) => {
+              const cells = [];
+              const val = Object.values(row);
+              console.log(row);
+              for (let i = 0; i < val.length; i++) {
+                console.log('push');
+                cells.push(<Td>{val[i]}</Td>);
+              }
+              return <Tr> {cells} </Tr>;
+            })}
+          </Tbody>
         </Table>
-        </TableContainer>
+      </TableContainer>
     </Stack>
-};
+  );
+}

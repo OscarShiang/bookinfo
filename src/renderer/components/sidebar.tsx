@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode, ReactText } from 'react';
 import {
   IconButton,
   Box,
@@ -14,13 +14,8 @@ import {
   BoxProps,
   FlexProps,
 } from '@chakra-ui/react';
-import {
-  FiMenu,
-  FiBook,
-  FiDatabase,
-} from 'react-icons/fi';
+import { FiMenu, FiBook, FiDatabase } from 'react-icons/fi';
 import { IconType } from 'react-icons';
-import { ReactText } from 'react';
 
 interface LinkItemProps {
   name: string;
@@ -47,7 +42,8 @@ export default function SimpleSidebar({ children }: { children: ReactNode }) {
         onClose={onClose}
         returnFocusOnClose={false}
         onOverlayClick={onClose}
-        size="full">
+        size="full"
+      >
         <DrawerContent>
           <SidebarContent onClose={onClose} />
         </DrawerContent>
@@ -74,7 +70,8 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
       w={{ base: 'full', md: 60 }}
       pos="fixed"
       h="full"
-      {...rest}>
+      {...rest}
+    >
       <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
         <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold">
           Logo
@@ -97,7 +94,11 @@ interface NavItemProps extends FlexProps {
 }
 const NavItem = ({ icon, children, link, ...rest }: NavItemProps) => {
   return (
-    <Link href={link} style={{ textDecoration: 'none' }} _focus={{ boxShadow: 'none' }}>
+    <Link
+      href={link}
+      style={{ textDecoration: 'none' }}
+      _focus={{ boxShadow: 'none' }}
+    >
       <Flex
         align="center"
         p="4"
@@ -109,7 +110,8 @@ const NavItem = ({ icon, children, link, ...rest }: NavItemProps) => {
           bg: 'cyan.400',
           color: 'white',
         }}
-        {...rest}>
+        {...rest}
+      >
         {icon && (
           <Icon
             mr="4"
@@ -140,7 +142,8 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
       borderBottomWidth="1px"
       borderBottomColor={useColorModeValue('gray.200', 'gray.700')}
       justifyContent="flex-start"
-      {...rest}>
+      {...rest}
+    >
       <IconButton
         variant="outline"
         onClick={onOpen}

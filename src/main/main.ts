@@ -14,7 +14,7 @@ import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
-import db from './database'
+import db from './database';
 
 export default class AppUpdater {
   constructor() {
@@ -33,14 +33,14 @@ ipcMain.on('ipc-example', async (event, arg) => {
 });
 
 ipcMain.on('db-cmd', (event, arg) => {
-  console.log(`receive db-cmd ${arg}`)
+  console.log(`receive db-cmd ${arg}`);
   const sql = arg;
   db.all(sql, (err, rows) => {
     if (err) {
       console.log(err);
-      event.reply('db-reply', { status: 'fail', data: rows })
+      event.reply('db-reply', { status: 'fail', data: rows });
     } else {
-      event.reply('db-reply', { status: 'success', data: rows});
+      event.reply('db-reply', { status: 'success', data: rows });
     }
   });
 });

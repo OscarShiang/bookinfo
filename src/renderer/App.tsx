@@ -1,19 +1,15 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { ChakraProvider } from '@chakra-ui/react';
-
-import BookViewer from './views/BookViewer';
 import SQLCmd from './views/SQLCmd';
 
 import SimpleSidebar from './components/sidebar';
+import Monitor from './views/Monitor';
 
 const MainContent = () => {
   return (
     <Routes>
-      <Route
-        path="index.html"
-        element={<Navigate replace to="/bookviewer" />}
-      />
-      <Route path="/bookviewer" element={<BookViewer />} />
+      <Route path="index.html" element={<Navigate replace to="/monitor" />} />
+      <Route path="/monitor" element={<Monitor />} />
       <Route path="/sqlcmd" element={<SQLCmd />} />
     </Routes>
   );

@@ -35,32 +35,45 @@ ipcMain.on('ipc-example', async (event, arg) => {
 ipcMain.on('db-cmd', (event, arg) => {
   console.log(`receive db-cmd ${arg}`);
   const sql = arg;
-  db.all(sql, (err, rows) => {
-  if (err) {
+  db.all(sql, function(err, rows) {
+    if (err) {
       console.log(err);
       event.reply('db-reply', { status: 'fail', data: rows });
-  } else {
+    } else {
       console.log(rows);
       event.reply('db-reply', { status: 'success', data: rows });
-  }
+    }
   });
 });
 
 ipcMain.on('books', (event, _) => {
-  db.all('SELECT book.name AS name, author.name AS author FROM book, author WHERE book.author == author.aid', (_, rows) => {
-      event.reply('books-reply', rows)
-  })
-})
+  db.all(
+    'SELECT name FROM book',
+    (_, rows) => {
+      event.reply('books-reply', rows);
+    }
+  );
+});
 
 ipcMain.on('authors', (event, _) => {
   db.all('SELECT name FROM author;', (_, rows) => {
-      event.reply('authors-reply', rows)
-  })
-})
+    event.reply('authors-reply', rows);
+  });
+});
 
 ipcMain.on('publishers', (event, _) => {
   db.all('SELECT name FROM publisher;', (_, rows) => {
-      event.reply('publishers-reply', rows)
+    event.reply('publishers-reply', rows);
+  });
+});
+
+ipcMain.on('db-alter', (event, arg) => {
+  db.run(arg, function(err) {
+    if (err) {
+      event.reply('db-alter-reply', 'fail');
+    } else {
+      event.reply('db-alter-reply', 'success');
+    }
   })
 })
 

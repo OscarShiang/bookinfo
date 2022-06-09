@@ -1,153 +1,250 @@
-<img src=".erb/img/erb-banner.svg" width="100%" />
+# DBMS Final Project
 
-<br>
+## 系統環境
 
-<p>
-  Electron React Boilerplate uses <a href="https://electron.atom.io/">Electron</a>, <a href="https://facebook.github.io/react/">React</a>, <a href="https://github.com/reactjs/react-router">React Router</a>, <a href="https://webpack.js.org/">Webpack</a> and <a href="https://www.npmjs.com/package/react-refresh">React Fast Refresh</a>.
-</p>
+- UI Framework: `React`, `Electron`
+- Database Engine: `SQLite3`
 
-<br>
+## 介面截圖
 
-<div align="center">
+![](https://i.imgur.com/I5lxoEo.png)
 
-[![Build Status][github-actions-status]][github-actions-url]
-[![Github Tag][github-tag-image]][github-tag-url]
-[![Discord](https://badgen.net/badge/icon/discord?icon=discord&label)](https://discord.gg/Fjy3vfgy5q)
+![](https://i.imgur.com/4hIkwDk.png)
 
-[![OpenCollective](https://opencollective.com/electron-react-boilerplate-594/backers/badge.svg)](#backers)
-[![OpenCollective](https://opencollective.com/electron-react-boilerplate-594/sponsors/badge.svg)](#sponsors)
-[![StackOverflow][stackoverflow-img]][stackoverflow-url]
+## 安裝使用說明
 
-</div>
+### 安裝
 
-## Install
-
-Clone the repo and install dependencies:
-
-```bash
-git clone --depth 1 --branch main https://github.com/electron-react-boilerplate/electron-react-boilerplate.git your-project-name
-cd your-project-name
-npm install
+```shell
+$ npm install
 ```
 
-**Having issues installing? See our [debugging guide](https://github.com/electron-react-boilerplate/electron-react-boilerplate/issues/400)**
+## 執行
 
-## Starting Development
-
-Start the app in the `dev` environment:
-
-```bash
-npm start
+```shell
+$ npm run start
 ```
 
-## Packaging for Production
+## 資料庫設計
 
-To package apps for the local platform:
+### Entity Relation
 
-```bash
-npm run package
+![](https://i.imgur.com/UZ2AWaN.png)
+
+
+### Relation Schema
+
+![](https://i.imgur.com/HvXDbTE.png)
+
+### 表格屬性說明
+
+- Author table: 作家相關資料
+
+| 屬性   | 說明        |
+| ------ | ----------- |
+| aid    | Primary Key |
+| name   | 作家名稱    |
+| gender | 作家性別    |
+| intro  | 個人介紹    |
+
+- Book table: 記錄每本書的基本資料
+
+| 屬性      | 說明           |
+| --------- | -------------- |
+| bid       | Primary Key    |
+| name      | 書名           |
+| intro     | 簡介           |
+| author    | 作者的 `aid`   |
+| publisher | 出版商的 `pid` |
+
+- Publisher table: 記錄出版商的資料
+
+| 屬性     | 說明             |
+| -------- | ---------------- |
+| pid      | Primary Key      |
+| name     | 出版商名稱       |
+| location | 出版社所在地區   |
+| phonenum | 出版社的電話號碼 |
+
+- Reader table: 記錄讀者的資料
+
+| 屬性   | 說明        |
+| ------ | ----------- |
+| bid    | Primary Key |
+| name   | 讀者名稱    |
+| gender | 讀者性別    |
+
+- Comment table: 記錄所有書籍評論
+
+| 屬性       | 說明                 |
+| ---------- | -------------------- |
+| cid        | Primary Key          |
+| content    | 評論內文             |
+| author     | 撰寫評論的讀者 `rid` |
+| comment_to | 評論之書籍的 `bid`   |
+
+- Rating table: 記錄所有評論分數 （因為每位讀者可以對多個不同評論進行評分，故需要以獨立的表格來記錄對應的關係與分數）
+
+| 屬性       | 說明                 |
+| ---------- | -------------------- |
+| rateid     | Primary Key          |
+| rate_by    | 進行評分的讀者 `rid` |
+| to_comment | 評分之評論的 `cid`   |
+| score      | 評分分數 (0 ~ 5)     |
+
+## Embedded SQL 說明
+
+### SELECT-FROM-WHERE
+
+查詢所有書籍
+
+```sql
+SELECT * FROM book
 ```
 
-## Docs
+### DELETE
 
-See our [docs and guides here](https://electron-react-boilerplate.js.org/docs/installation)
+將最後一本加入資料庫的書籍資料刪除
 
-## Community
+```sql
+DELETE FROM book WHERE bid == (SELECT MAX(bid) FROM book)
+```
 
-Join our Discord: https://discord.gg/Fjy3vfgy5q
+### INSERT
 
-## Donations
+加入新的書籍資料
 
-**Donations will ensure the following:**
+```sql
+INSERT INTO book (name, intro, author, publisher) 
+VALUES ("bookname", "brief intro", 1, 2)
+```
 
-- 🔨 Long term maintenance of the project
-- 🛣 Progress on the [roadmap](https://electron-react-boilerplate.js.org/docs/roadmap)
-- 🐛 Quick responses to bug reports and help requests
+### UPDATE
 
-## Backers
+更新書目簡介
 
-Support us with a monthly donation and help us continue our activities. [[Become a backer](https://opencollective.com/electron-react-boilerplate-594#backer)]
+```sql
+UPDATE book SET intro = "new intro" WHERE bid == 0
+```
 
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/0/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/0/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/1/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/1/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/2/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/2/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/3/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/3/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/4/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/4/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/5/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/5/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/6/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/6/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/7/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/7/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/8/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/8/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/9/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/9/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/10/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/10/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/11/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/11/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/12/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/12/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/13/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/13/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/14/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/14/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/15/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/15/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/16/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/16/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/17/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/17/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/18/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/18/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/19/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/19/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/20/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/20/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/21/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/21/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/22/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/22/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/23/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/23/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/24/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/24/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/25/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/25/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/26/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/26/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/27/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/27/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/28/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/28/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/29/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/29/avatar.svg"></a>
+### IN
 
-## Sponsors
+查詢位於台灣的出版商資料
 
-Become a sponsor and get your logo on our README on Github with a link to your site. [[Become a sponsor](https://opencollective.com/electron-react-boilerplate-594-594#sponsor)]
+```sql
+SELECT * FROM publisher WHERE location IN ('Taiwan')
+```
 
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/0/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/0/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/1/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/1/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/2/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/2/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/3/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/3/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/4/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/4/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/5/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/5/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/6/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/6/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/7/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/7/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/8/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/8/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/9/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/9/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/10/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/10/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/11/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/11/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/12/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/12/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/13/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/13/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/14/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/14/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/15/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/15/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/16/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/16/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/17/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/17/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/18/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/18/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/19/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/19/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/20/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/20/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/21/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/21/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/22/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/22/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/23/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/23/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/24/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/24/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/25/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/25/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/26/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/26/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/27/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/27/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/28/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/28/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/29/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/29/avatar.svg"></a>
+### NOT IN
 
-## Maintainers
+查詢位在台灣以外地區的出版商資料
 
-- [Amila Welihinda](https://github.com/amilajack)
-- [John Tran](https://github.com/jooohhn)
-- [C. T. Lin](https://github.com/chentsulin)
-- [Jhen-Jie Hong](https://github.com/jhen0409)
+```sql
+SELECT * FROM publisher WHERE location NOT IN ('Taiwan')
+```
 
-## License
+### EXISTS
 
-MIT © [Electron React Boilerplate](https://github.com/electron-react-boilerplate)
+查詢有被評論過的所有書籍資料
 
-[github-actions-status]: https://github.com/electron-react-boilerplate/electron-react-boilerplate/workflows/Test/badge.svg
-[github-actions-url]: https://github.com/electron-react-boilerplate/electron-react-boilerplate/actions
-[github-tag-image]: https://img.shields.io/github/tag/electron-react-boilerplate/electron-react-boilerplate.svg?label=version
-[github-tag-url]: https://github.com/electron-react-boilerplate/electron-react-boilerplate/releases/latest
-[stackoverflow-img]: https://img.shields.io/badge/stackoverflow-electron_react_boilerplate-blue.svg
-[stackoverflow-url]: https://stackoverflow.com/questions/tagged/electron-react-boilerplate
+```sql
+SELECT * 
+FROM book 
+WHERE EXISTS (
+    SELECT * 
+    FROM comment 
+    WHERE comment_to == bid)
+```
+
+### NOT EXISTS
+
+查詢還未被評論記錄的書本資料
+
+```sql
+SELECT * 
+FROM book 
+WHERE NOT EXISTS (
+    SELECT * 
+    FROM comment 
+    WHERE comment_to == bid)
+```
+
+### COUNT
+
+計算每位有留過評論的讀者之評論總數量
+
+```sql
+SELECT rid, name, COUNT(cid) AS cnt 
+FROM reader, comment 
+WHERE author == rid
+GROUP BY rid
+```
+
+### SUM
+
+計算每位有留言的讀者所留下的評論總字數
+
+```sql
+SELECT rid, SUM(len) 
+FROM (
+    SELECT rid, LENGTH(content) AS len 
+    FROM reader, comment 
+    WHERE reader.rid == comment.author) 
+GROUP BY rid
+```
+
+### MAX
+
+查詢 "幼獅文化" 所出版的書中擁有最多則評論的書
+
+```sql
+SELECT bid, name, MAX(cmt) 
+FROM (
+    SELECT bid, book.name AS name, COUNT(cid) AS cmt, pid 
+    FROM book, publisher, comment 
+    WHERE bid == comment_to AND
+    	  book.publisher == publisher.pid AND
+    	  publisher.pid == 7 
+    GROUP BY comment_to)
+GROUP BY pid
+```
+
+### MIN
+
+查詢 "幼獅文化" 所出版的書中擁有最少評論的書
+
+```sql
+SELECT bid, name, MIN(cmt) 
+FROM (
+    SELECT bid, book.name AS name, COUNT(cid) AS cmt, pid 
+    FROM book, publisher, comment 
+    WHERE bid == comment_to AND 
+    	  book.publisher == publisher.pid AND
+    	  publisher.pid == 7 
+    GROUP BY comment_to) 
+GROUP BY pid
+```
+
+### AVG
+
+查詢有留言之讀者的平均評論則數
+
+```sql
+SELECT AVG(cmt) 
+FROM (
+    SELECT rid, COUNT(cid) AS cmt
+    FROM reader, comment
+    WHERE author == rid GROUP BY author)
+```
+
+### HAVING 
+
+查詢曾出版過 2 本以上書籍的作者名稱
+
+```sql
+SELECT aid, author.name AS name, COUNT(bid) AS cnt
+FROM author, book
+WHERE aid == book.author
+GROUP BY aid
+HAVING cnt >= 2
+```

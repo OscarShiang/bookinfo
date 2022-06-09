@@ -33,12 +33,14 @@ export default function SQLCmd() {
         toast({
           description: 'Something went wrong',
           status: 'error',
+          position: 'bottom-right',
           isClosable: true,
         });
       } else {
         setTable(res.data);
         toast({
           description: 'Success',
+          position: 'bottom-right',
           isClosable: true,
         });
       }

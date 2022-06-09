@@ -13,7 +13,7 @@ import {
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import { FaCheck } from 'react-icons/fa';
-import query from '../sql';
+import db from '../sql';
 
 export default function SQLCmd() {
   const [table, setTable] = useState([]);
@@ -27,7 +27,7 @@ export default function SQLCmd() {
   function submit() {
     console.log(input);
 
-    query(input).then((res) => {
+    db.query(input).then((res) => {
       console.log(res);
       if (res.status === 'fail') {
         toast({

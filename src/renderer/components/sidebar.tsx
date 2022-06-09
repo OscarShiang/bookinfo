@@ -14,7 +14,7 @@ import {
   BoxProps,
   FlexProps,
 } from '@chakra-ui/react';
-import { FiMenu, FiBook, FiDatabase } from 'react-icons/fi';
+import { FiMenu, FiBook, FiDatabase, FiMonitor } from 'react-icons/fi';
 import { IconType } from 'react-icons';
 
 interface LinkItemProps {
@@ -23,7 +23,8 @@ interface LinkItemProps {
   link: string;
 }
 const LinkItems: Array<LinkItemProps> = [
-  { name: 'View Books', icon: FiBook, link: './bookviewer' },
+  // { name: 'View Books', icon: FiBook, link: './bookviewer' },
+  { name: 'Monitor', icon: FiMonitor, link: './monitor' },
   { name: 'SQL Command', icon: FiDatabase, link: './sqlcmd' },
 ];
 
@@ -74,7 +75,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
     >
       <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
         <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold">
-          Logo
+          Book Info
         </Text>
         <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
       </Flex>

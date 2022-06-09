@@ -35,7 +35,7 @@ ipcMain.on('ipc-example', async (event, arg) => {
 ipcMain.on('db-cmd', (event, arg) => {
   console.log(`receive db-cmd ${arg}`);
   const sql = arg;
-  db.all(sql, function(err, rows) {
+  db.all(sql, function (err, rows) {
     if (err) {
       console.log(err);
       event.reply('db-reply', { status: 'fail', data: rows });
@@ -47,12 +47,9 @@ ipcMain.on('db-cmd', (event, arg) => {
 });
 
 ipcMain.on('books', (event, _) => {
-  db.all(
-    'SELECT name FROM book',
-    (_, rows) => {
-      event.reply('books-reply', rows);
-    }
-  );
+  db.all('SELECT name FROM book', (_, rows) => {
+    event.reply('books-reply', rows);
+  });
 });
 
 ipcMain.on('authors', (event, _) => {
@@ -68,14 +65,14 @@ ipcMain.on('publishers', (event, _) => {
 });
 
 ipcMain.on('db-alter', (event, arg) => {
-  db.run(arg, function(err) {
+  db.run(arg, function (err) {
     if (err) {
       event.reply('db-alter-reply', 'fail');
     } else {
       event.reply('db-alter-reply', 'success');
     }
-  })
-})
+  });
+});
 
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');

@@ -10,13 +10,13 @@ const query = async (sql: string) => {
 };
 
 const alter = async (sql: string) => {
-    return new Promise((resolve) => {
-      ipcRenderer.once('db-alter-reply', (d) => {
-        resolve(d);
-      });
-      ipcRenderer.sendMessage('db-alter', sql);
+  return new Promise((resolve) => {
+    ipcRenderer.once('db-alter-reply', (d) => {
+      resolve(d);
     });
-  };
+    ipcRenderer.sendMessage('db-alter', sql);
+  });
+};
 
 const getAuthors = () => {
   return new Promise((resolve) => {
